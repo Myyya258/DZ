@@ -1,10 +1,11 @@
 
 // @ts-nocheck
 import React from 'react';
-import { useUnifiedModalContext } from './UnifiedModalProvider';
+import { useUnifiedModals } from './UnifiedModalProvider';
 import { PDFViewerModal } from '../specialized/PDFViewerModal';
 import { ComparisonModal } from '../specialized/ComparisonModal';
 import { FilterModal } from '../specialized/FilterModal';
+import { OCRApprovalModal } from '../specialized/OCRApprovalModal';
 import { ExportModal } from '../ExportModal';
 import { ImportModal } from '../ImportModal';
 import { FeedbackModal } from '../FeedbackModal';
@@ -14,7 +15,7 @@ import { AlertManagementModal } from '../AlertManagementModal';
 import { UserManagementModal } from '../UserManagementModal';
 
 export function UnifiedModalRenderer() {
-  const { modals, closeModal } = useUnifiedModalContext();
+  const { modals, closeModal } = useUnifiedModals();
 
   return (
     <>
@@ -40,6 +41,21 @@ export function UnifiedModalRenderer() {
         onFiltersApply={(filters) => {
           console.log('Filters applied:', filters);
         }}
+      />
+
+      <OCRApprovalModal
+        isOpen={modals.ocrApproval?.isOpen || false}
+        onClose={() => closeModal('ocrApproval')}
+        onApproveItem={(item) => {
+          console.log('OCR item approved:', item);
+        }}
+        onRejectItem={(item, reason) => {
+          console.log('OCR item rejected:', item, reason);
+        }}
+        onViewItem={(item) => {
+          console.log('OCR item viewed:', item);
+        }}
+        filterType={modals.ocrApproval?.data?.filterType || 'all'}
       />
 
       <ExportModal
